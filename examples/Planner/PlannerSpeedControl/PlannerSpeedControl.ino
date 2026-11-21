@@ -1,0 +1,17 @@
+#include "GyverPlanner.h"
+Stepper<STEPPER2WIRE> stepper1(2, 5);
+Stepper<STEPPER2WIRE> stepper2(3, 6);
+GPlanner<STEPPER2WIRE, 2> planner;
+void setup() {
+  Serial.begin(57600);
+  planner.addStepper(0, stepper1);
+  planner.addStepper(1, stepper2);
+  Serial.setTimeout(10);
+}
+void loop() {
+  planner.tick();
+  if (Serial.available() > 0) {
+    int val = Serial.parseInt();
+    planner.setSpeed(0, val);
+  }
+}
